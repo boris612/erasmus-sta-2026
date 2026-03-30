@@ -1,0 +1,40 @@
+@model Events.MVC.Models.Events.EventViewModel
+
+<tr id="event-@Model.Id">
+    <td>@Model.Id</td>
+    <td colspan="4">
+        <form
+            asp-action="Edit"
+            asp-route-id="@Model.Id"
+            method="post"
+            hx-post="@Url.Action("Edit", "Events", new { id = Model.Id })"
+            hx-target="#event-@Model.Id"
+            hx-swap="outerHTML">
+            @Html.AntiForgeryToken()
+            <input asp-for="Id" type="hidden" />
+            <div class="row g-2 align-items-start">
+                <div class="col-lg-5">
+                    <input asp-for="Name" class="form-control" />
+                    <span asp-validation-for="Name" class="text-danger small"></span>
+                </div>
+                <div class="col-sm-4 col-lg-3">
+                    <input asp-for="EventDate" class="form-control" type="date" />
+                    <span asp-validation-for="EventDate" class="text-danger small"></span>
+                </div>
+                <div class="col-md-auto">
+                    <button type="submit" class="btn btn-sm btn-primary">Save</button>
+                </div>
+                <div class="col-md-auto">
+                    <button
+                        type="button"
+                        class="btn btn-sm btn-outline-secondary"
+                        hx-get="@Url.Action("Row", "Events", new { id = Model.Id })"
+                        hx-target="#event-@Model.Id"
+                        hx-swap="outerHTML">
+                        Cancel
+                    </button>
+                </div>
+            </div>
+        </form>
+    </td>
+</tr>

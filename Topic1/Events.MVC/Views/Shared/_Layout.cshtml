@@ -1,0 +1,175 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>@ViewData["Title"] - Events</title>
+    <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
+    <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
+</head>
+<body class="bg-body-tertiary">
+    <header class="border-bottom bg-white shadow-sm">
+        <nav class="navbar navbar-expand-lg">
+            <div class="container">
+                <a class="navbar-brand fw-semibold" asp-controller="Home" asp-action="Index">Events</a>
+                @if (ViewData["HeaderActionLabel"] is string headerActionLabel && ViewData["HeaderActionTarget"] is string headerActionTarget)
+                {
+                    <div class="ms-3 d-none d-lg-flex align-items-center">
+                        <button
+                            type="button"
+                            class="btn btn-sm btn-outline-primary"
+                            data-bs-toggle="collapse"
+                            data-bs-target="@headerActionTarget"
+                            aria-expanded="false"
+                            aria-controls="@headerActionTarget.TrimStart('#')">
+                            @headerActionLabel
+                        </button>
+                    </div>
+                }
+                <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#mainNav" aria-controls="mainNav" aria-expanded="false" aria-label="Toggle navigation">
+                    <span class="navbar-toggler-icon"></span>
+                </button>
+                <div class="collapse navbar-collapse" id="mainNav">
+                    @if (ViewData["HeaderActionLabel"] is string mobileHeaderActionLabel && ViewData["HeaderActionTarget"] is string mobileHeaderActionTarget)
+                    {
+                        <div class="d-lg-none mb-3">
+                            <button
+                                type="button"
+                                class="btn btn-sm btn-outline-primary"
+                                data-bs-toggle="collapse"
+                                data-bs-target="@mobileHeaderActionTarget"
+                                aria-expanded="false"
+                                aria-controls="@mobileHeaderActionTarget.TrimStart('#')">
+                                @mobileHeaderActionLabel
+                            </button>
+                        </div>
+                    }
+                    <ul class="navbar-nav ms-auto gap-lg-2">
+                        <li class="nav-item">
+                            <a class="nav-link" asp-controller="Home" asp-action="Index">Home</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" asp-controller="Events" asp-action="Index">Events</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" asp-controller="Sports" asp-action="Index">Sports</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" asp-controller="Countries" asp-action="Index">Countries</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" asp-controller="People" asp-action="Index">People</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" asp-controller="Registrations" asp-action="Index">Registrations</a>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </nav>
+    </header>
+
+    <main class="container py-4">
+        @RenderBody()
+    </main>
+
+    <div class="toast-container position-fixed bottom-0 end-0 p-3">
+        <div id="app-toast" class="toast border-0 shadow-sm text-white" role="status" aria-live="polite" aria-atomic="true">
+            <div id="app-toast-header" class="toast-header">
+                <strong id="app-toast-title" class="me-auto">Notification</strong>
+                <button type="button" class="btn-close" data-bs-dismiss="toast" aria-label="Close"></button>
+            </div>
+            <div id="app-toast-body" class="toast-body"></div>
+        </div>
+    </div>
+
+    <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="~/lib/htmx.org/dist/htmx.min.js"></script>
+    <script src="~/js/pager.js" asp-append-version="true"></script>
+    <script>
+        function initializeTooltips(root) {
+            if (!window.bootstrap) {
+                return;
+            }
+
+            var scope = root || document;
+            var tooltipElements = scope.querySelectorAll('[data-bs-toggle="tooltip"]');
+            tooltipElements.forEach(function (element) {
+                bootstrap.Tooltip.getOrCreateInstance(element, {
+                    container: "body",
+                    trigger: "hover focus"
+                });
+            });
+        }
+
+        function showAppToast(options) {
+            var toastElement = document.getElementById("app-toast");
+            var headerElement = document.getElementById("app-toast-header");
+            var titleElement = document.getElementById("app-toast-title");
+            var bodyElement = document.getElementById("app-toast-body");
+
+            if (!toastElement || !headerElement || !titleElement || !bodyElement || !window.bootstrap) {
+                return;
+            }
+
+            var variant = options.variant || "success";
+            toastElement.classList.remove("toast-success", "toast-error");
+            toastElement.classList.add(variant === "error" ? "toast-error" : "toast-success");
+
+            headerElement.classList.remove("text-bg-success", "text-bg-danger");
+            headerElement.classList.add(variant === "error" ? "text-bg-danger" : "text-bg-success");
+
+            titleElement.textContent = options.title || "Notification";
+            bodyElement.textContent = options.message || "";
+
+            var toast = bootstrap.Toast.getOrCreateInstance(toastElement, { delay: 2500 });
+            toast.show();
+        }
+
+        document.body.addEventListener("show-toast", function (event) {
+            showAppToast(event.detail || {});
+        });
+
+        document.addEventListener("DOMContentLoaded", function () {
+            initializeTooltips(document);
+        });
+
+        document.body.addEventListener("htmx:afterSwap", function (event) {
+            initializeTooltips(event.target);
+        });
+
+        document.body.addEventListener("htmx:responseError", function (event) {
+            var xhr = event.detail.xhr;
+            var message = "An error occurred while processing the request.";
+
+            if (xhr && xhr.responseText) {
+                try {
+                    var problem = JSON.parse(xhr.responseText);
+                    message = problem.detail || problem.title || xhr.responseText;
+                }
+                catch {
+                    message = xhr.responseText;
+                }
+            }
+
+            showAppToast({
+                variant: "error",
+                title: "Error",
+                message: message
+            });
+        });
+
+        @if (TempData["ToastMessage"] is string toastMessage)
+        {
+            var initialToastJson = System.Text.Json.JsonSerializer.Serialize(new
+            {
+                variant = TempData["ToastVariant"] as string ?? "success",
+                title = TempData["ToastTitle"] as string ?? "Notification",
+                message = toastMessage
+            });
+            @:showAppToast(@Html.Raw(initialToastJson));
+        }
+    </script>
+    @await RenderSectionAsync("Scripts", required: false)
+</body>
+</html>

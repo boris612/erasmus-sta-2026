@@ -1,0 +1,21 @@
+@model Events.MVC.Models.Sports.SportViewModel
+
+<form
+    asp-action="Create"
+    method="post"
+    hx-post="@Url.Action("Create", "Sports")"
+    hx-include="#sports-state"
+    hx-target="#sports-list"
+    hx-swap="outerHTML">
+    @Html.AntiForgeryToken()
+    <div class="row g-3 align-items-end">
+        <div class="col-sm-8 col-lg-6">
+            <label asp-for="Name" class="form-label"></label>
+            <input asp-for="Name" class="form-control" />
+            <span asp-validation-for="Name" class="text-danger small"></span>
+        </div>
+        <div class="col-sm-auto">
+            <button type="submit" class="btn btn-primary">Add sport</button>
+        </div>
+    </div>
+</form>

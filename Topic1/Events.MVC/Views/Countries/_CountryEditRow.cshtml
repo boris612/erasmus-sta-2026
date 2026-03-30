@@ -1,0 +1,44 @@
+@model Events.MVC.Models.Countries.CountryViewModel
+
+<tr id="country-@Model.Code">
+    <td>@Model.Code</td>
+    <td colspan="3">
+        <form
+            asp-action="Edit"
+            asp-route-id="@Model.Code"
+            method="post"
+            hx-post="@Url.Action("Edit", "Countries", new { id = Model.Code })"
+            hx-target="#country-@Model.Code"
+            hx-swap="outerHTML">
+            @Html.AntiForgeryToken()
+            <input asp-for="Code" type="hidden" />
+            <div asp-validation-summary="ModelOnly" class="text-danger small mb-2"></div>
+            <div class="row g-2 align-items-start">
+                <div class="col-sm-3 col-lg-2">
+                    <input asp-for="Alpha3" class="form-control text-uppercase" />
+                    <span asp-validation-for="Alpha3" class="text-danger small"></span>
+                </div>
+                <div class="col-lg-5">
+                    <input asp-for="Name" class="form-control" />
+                    <span asp-validation-for="Name" class="text-danger small"></span>
+                </div>
+                <div class="col-md-auto">
+                    <button type="submit" class="btn btn-sm btn-primary">Save</button>
+                </div>
+                <div class="col-md-auto">
+                    <button
+                        type="button"
+                        class="btn btn-sm btn-outline-secondary"
+                        hx-get="@Url.Action("Row", "Countries", new { id = Model.Code })"
+                        hx-target="#country-@Model.Code"
+                        hx-swap="outerHTML">
+                        Cancel
+                    </button>
+                </div>
+                <div class="col-12">
+                    <partial name="_CountryTranslationsEditor" model="Model.Translations" view-data='new ViewDataDictionary(ViewData) { ["Prefix"] = "Translations" }' />
+                </div>
+            </div>
+        </form>
+    </td>
+</tr>

@@ -1,0 +1,61 @@
+body {
+    min-height: 100vh;
+}
+
+.navbar-brand {
+    letter-spacing: 0.02em;
+}
+
+.card {
+    border-radius: 1rem;
+}
+
+.table > :not(caption) > * > * {
+    padding-top: 0.9rem;
+    padding-bottom: 0.9rem;
+}
+
+.pagebox {
+    width: 3.5rem;
+    min-width: 3.5rem;
+    padding-left: 0.4rem;
+    padding-right: 0.4rem;
+    text-align: center;
+}
+
+#app-toast {
+    min-width: 18rem;
+}
+
+#app-toast.toast-success {
+    background-color: #198754;
+}
+
+#app-toast.toast-error {
+    background-color: #dc3545;
+}
+
+#app-toast .toast-body {
+    color: #fff;
+}
+
+#app-toast .btn-close {
+    filter: invert(1);
+}
+
+.registration-person-suggestions {
+    position: absolute;
+    top: calc(100% + 0.25rem);
+    left: 0;
+    right: 0;
+    z-index: 1050;
+    max-height: 16rem;
+    overflow-y: auto;
+}
+
+.person-name-tooltip .tooltip-inner {
+    max-width: 28rem;
+    padding: 0.5rem 0.75rem;
+    font-size: 1.1rem;
+    line-height: 1.3;
+}

@@ -1,0 +1,47 @@
+@model IList<Events.MVC.Models.Countries.CountryTranslationViewModel>
+
+@{
+    var prefix = (string?)ViewData["Prefix"] ?? "Translations";
+    var canRemoveRows = (bool?)ViewData["CanRemoveRows"] ?? true;
+    var rows = Model.Count == 0 ? [new Events.MVC.Models.Countries.CountryTranslationViewModel()] : Model;
+}
+
+<div class="country-translations-editor" data-country-translations data-prefix="@prefix">
+    <div class="d-flex justify-content-between align-items-center gap-2 mb-2">
+        <span class="form-label mb-0">Translations</span>
+        <button type="button" class="btn btn-sm btn-outline-secondary" data-add-translation>Add translation</button>
+    </div>
+
+    <div class="d-flex flex-column gap-2" data-translation-list>
+        @for (var i = 0; i < rows.Count; i++)
+        {
+            <div class="row g-2 align-items-start" data-translation-row>
+                <div class="col-sm-3">
+                    <input name="@($"{prefix}[{i}].LanguageCode")" value="@rows[i].LanguageCode" class="form-control" placeholder="en" />
+                </div>
+                <div class="col-sm-7">
+                    <input name="@($"{prefix}[{i}].Name")" value="@rows[i].Name" class="form-control" placeholder="English name" />
+                </div>
+                <div class="col-sm-2 d-grid">
+                    <button type="button" class="btn btn-outline-danger" data-remove-translation @(!canRemoveRows ? "data-keep-one" : null) @(rows.Count == 1 && !canRemoveRows ? "disabled" : null)>Remove</button>
+                </div>
+            </div>
+        }
+    </div>
+
+    <template data-translation-template>
+        <div class="row g-2 align-items-start" data-translation-row>
+            <div class="col-sm-3">
+                <input class="form-control" data-field="LanguageCode" placeholder="en" />
+            </div>
+            <div class="col-sm-7">
+                <input class="form-control" data-field="Name" placeholder="English name" />
+            </div>
+            <div class="col-sm-2 d-grid">
+                <button type="button" class="btn btn-outline-danger" data-remove-translation @(!canRemoveRows ? "data-keep-one" : null)>Remove</button>
+            </div>
+        </div>
+    </template>
+
+    <div class="form-text">Enter a language code such as <code>en</code>, <code>de</code>, or <code>hr</code>.</div>
+</div>

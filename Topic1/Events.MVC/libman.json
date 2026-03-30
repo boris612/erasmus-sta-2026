@@ -1,0 +1,21 @@
+{
+  "version": "1.0",
+  "defaultProvider": "jsdelivr",
+  "libraries": [
+    {
+      "library": "bootstrap@5.3.3",
+      "destination": "wwwroot/lib/bootstrap/",
+      "files": [
+        "dist/css/bootstrap.min.css",
+        "dist/js/bootstrap.bundle.min.js"
+      ]
+    },
+    {
+      "library": "htmx.org@2.0.4",
+      "destination": "wwwroot/lib/htmx.org/",
+      "files": [
+        "dist/htmx.min.js"
+      ]
+    }
+  ]
+}

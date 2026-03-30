@@ -1,0 +1,36 @@
+@model Events.MVC.Models.Sports.SportViewModel
+
+<tr id="sport-@Model.Id">
+    <td>@Model.Id</td>
+    <td colspan="2">
+        <form
+            asp-action="Edit"
+            asp-route-id="@Model.Id"
+            method="post"
+            hx-post="@Url.Action("Edit", "Sports", new { id = Model.Id })"
+            hx-target="#sport-@Model.Id"
+            hx-swap="outerHTML">
+            @Html.AntiForgeryToken()
+            <input asp-for="Id" type="hidden" />
+            <div class="row g-2 align-items-start">
+                <div class="col-lg-6">
+                    <input asp-for="Name" class="form-control" />
+                    <span asp-validation-for="Name" class="text-danger small"></span>
+                </div>
+                <div class="col-md-auto">
+                    <button type="submit" class="btn btn-sm btn-primary">Save</button>
+                </div>
+                <div class="col-md-auto">
+                    <button
+                        type="button"
+                        class="btn btn-sm btn-outline-secondary"
+                        hx-get="@Url.Action("Row", "Sports", new { id = Model.Id })"
+                        hx-target="#sport-@Model.Id"
+                        hx-swap="outerHTML">
+                        Cancel
+                    </button>
+                </div>
+            </div>
+        </form>
+    </td>
+</tr>

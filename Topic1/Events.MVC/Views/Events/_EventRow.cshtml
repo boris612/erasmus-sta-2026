@@ -1,0 +1,42 @@
+@model Events.MVC.Models.Events.EventViewModel
+
+<tr id="event-@Model.Id">
+    <td>@Model.Id</td>
+    <td>@Model.Name</td>
+    <td>@Model.EventDate.ToString("dd.MM.yyyy.")</td>
+    <td>@Model.ParticipantsCount</td>
+    <td class="text-end">
+        <div class="d-inline-flex gap-2">
+            <a
+                asp-controller="Registrations"
+                asp-action="Index"
+                asp-route-eventId="@Model.Id"
+                class="btn btn-sm btn-outline-secondary">
+                Registrations
+            </a>
+
+            <button
+                type="button"
+                class="btn btn-sm btn-outline-primary"
+                hx-get="@Url.Action("EditRow", "Events", new { id = Model.Id })"
+                hx-target="#event-@Model.Id"
+                hx-swap="outerHTML">
+                Edit
+            </button>
+
+            <form
+                asp-action="Delete"
+                asp-route-id="@Model.Id"
+                method="post"
+                class="d-inline"
+                hx-post="@Url.Action("Delete", "Events", new { id = Model.Id })"
+                hx-include="#events-state"
+                hx-target="#events-list"
+                hx-swap="outerHTML"
+                hx-confirm="Delete event '@Model.Name'?">
+                @Html.AntiForgeryToken()
+                <button type="submit" class="btn btn-sm btn-outline-danger">Delete</button>
+            </form>
+        </div>
+    </td>
+</tr>

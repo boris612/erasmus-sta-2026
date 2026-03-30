@@ -1,0 +1,44 @@
+@model Events.MVC.Models.People.PersonViewModel
+
+<tr id="person-@Model.Id">
+    <td>@Model.Id</td>
+    <td>
+        <span
+            tabindex="0"
+            data-bs-toggle="tooltip"
+            data-bs-custom-class="person-name-tooltip"
+            data-bs-title="@Model.FullNameTranscription">
+            @Model.FullName
+        </span>
+    </td>
+    <td>@Model.Email</td>
+    <td>@Model.BirthDate.ToString("dd.MM.yyyy.")</td>
+    <td>@Model.CountryName</td>
+    <td>@Model.RegistrationsCount</td>
+    <td class="text-end">
+        <div class="d-inline-flex gap-2">
+            <button
+                type="button"
+                class="btn btn-sm btn-outline-primary"
+                hx-get="@Url.Action("EditRow", "People", new { id = Model.Id })"
+                hx-target="#person-@Model.Id"
+                hx-swap="outerHTML">
+                Edit
+            </button>
+
+            <form
+                asp-action="Delete"
+                asp-route-id="@Model.Id"
+                method="post"
+                class="d-inline"
+                hx-post="@Url.Action("Delete", "People", new { id = Model.Id })"
+                hx-include="#people-state"
+                hx-target="#people-list"
+                hx-swap="outerHTML"
+                hx-confirm="Delete person '@Model.FullName'?">
+                @Html.AntiForgeryToken()
+                <button type="submit" class="btn btn-sm btn-outline-danger">Delete</button>
+            </form>
+        </div>
+    </td>
+</tr>

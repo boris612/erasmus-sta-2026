@@ -1,0 +1,38 @@
+@model PagedList<Events.MVC.Models.Sports.SportViewModel>
+
+@{
+    ViewData["Title"] = "Sports";
+    ViewData["HeaderActionLabel"] = "New sport";
+    ViewData["HeaderActionTarget"] = "#create-sport-panel";
+}
+
+<div class="d-flex flex-column gap-4">
+    <section id="create-sport-panel" class="collapse">
+        <div class="card border-0 shadow-sm">
+            <div class="card-body">
+                <h2 class="h5 mb-3">Add a new sport</h2>
+                <div id="create-sport-form">
+                    <partial name="_CreateSportForm" model='new Events.MVC.Models.Sports.SportViewModel()' />
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <partial name="_SportsList" model="Model" />
+</div>
+
+@section Scripts {
+    <script>
+        document.body.addEventListener("sport-created", function () {
+            var form = document.querySelector("#create-sport-form form");
+            if (form) {
+                form.reset();
+            }
+
+            var panel = document.getElementById("create-sport-panel");
+            if (panel && window.bootstrap) {
+                bootstrap.Collapse.getOrCreateInstance(panel).hide();
+            }
+        });
+    </script>
+}

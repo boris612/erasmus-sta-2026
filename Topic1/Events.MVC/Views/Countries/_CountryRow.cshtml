@@ -1,0 +1,33 @@
+@model Events.MVC.Models.Countries.CountryViewModel
+
+<tr id="country-@Model.Code">
+    <td>@Model.Code</td>
+    <td>@Model.Alpha3</td>
+    <td>@Model.Name</td>
+    <td class="text-end">
+        <div class="d-inline-flex gap-2">
+            <button
+                type="button"
+                class="btn btn-sm btn-outline-primary"
+                hx-get="@Url.Action("EditRow", "Countries", new { id = Model.Code })"
+                hx-target="#country-@Model.Code"
+                hx-swap="outerHTML">
+                Edit
+            </button>
+
+            <form
+                asp-action="Delete"
+                asp-route-id="@Model.Code"
+                method="post"
+                class="d-inline"
+                hx-post="@Url.Action("Delete", "Countries", new { id = Model.Code })"
+                hx-include="#countries-state"
+                hx-target="#countries-list"
+                hx-swap="outerHTML"
+                hx-confirm="Delete country '@Model.Name'?">
+                @Html.AntiForgeryToken()
+                <button type="submit" class="btn btn-sm btn-outline-danger">Delete</button>
+            </form>
+        </div>
+    </td>
+</tr>

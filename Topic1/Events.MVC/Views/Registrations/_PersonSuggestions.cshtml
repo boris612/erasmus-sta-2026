@@ -1,0 +1,23 @@
+@model IReadOnlyList<Microsoft.AspNetCore.Mvc.Rendering.SelectListItem>
+
+@if (Model.Count > 0)
+{
+    @foreach (var person in Model)
+    {
+        var parts = person.Text.Split('|', 2);
+        var originalName = parts[0];
+        var transcription = parts.Length > 1 ? parts[1] : string.Empty;
+        <button
+            type="button"
+            class="list-group-item list-group-item-action"
+            data-person-suggestion
+            data-person-id="@person.Value"
+            data-person-label="@originalName (@transcription)">
+            <span class="d-block">@originalName</span>
+            @if (!string.IsNullOrWhiteSpace(transcription))
+            {
+                <small class="d-block text-body-secondary">@transcription</small>
+            }
+        </button>
+    }
+}

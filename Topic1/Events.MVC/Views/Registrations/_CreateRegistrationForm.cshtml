@@ -1,0 +1,44 @@
+@model Events.MVC.Models.Registrations.RegistrationViewModel
+
+<form
+    asp-action="Create"
+    method="post"
+    hx-post="@Url.Action("Create", "Registrations")"
+    hx-include="#registrations-state"
+    hx-target="#registrations-panel"
+    hx-swap="outerHTML">
+    @Html.AntiForgeryToken()
+    <input asp-for="EventId" type="hidden" />
+    <div asp-validation-summary="ModelOnly" class="text-danger small mb-3"></div>
+    <div class="row g-3 align-items-end">
+        <div class="col-md-5">
+            <label asp-for="PersonId" class="form-label"></label>
+            <input asp-for="PersonId" type="hidden" />
+            <div class="position-relative registration-person-autocomplete">
+                <input
+                    asp-for="PersonLookup"
+                    class="form-control"
+                    placeholder="Start typing a person's name"
+                    autocomplete="off"
+                    data-person-autocomplete
+                    hx-get="@Url.Action("PersonSuggestions", "Registrations")"
+                    hx-include="#registrations-state"
+                    hx-trigger="input changed delay:250ms"
+                    hx-target="#registration-person-suggestions-create"
+                    hx-swap="innerHTML" />
+                <div id="registration-person-suggestions-create" class="list-group registration-person-suggestions"></div>
+            </div>
+            <span asp-validation-for="PersonId" class="text-danger small"></span>
+        </div>
+        <div class="col-md-5">
+            <label asp-for="SportId" class="form-label"></label>
+            <select asp-for="SportId" asp-items="Model.SportOptions" class="form-select">
+                <option value="">Select a sport</option>
+            </select>
+            <span asp-validation-for="SportId" class="text-danger small"></span>
+        </div>
+        <div class="col-sm-auto">
+            <button type="submit" class="btn btn-primary">Add registration</button>
+        </div>
+    </div>
+</form>

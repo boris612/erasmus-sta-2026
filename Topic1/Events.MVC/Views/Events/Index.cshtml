@@ -1,0 +1,43 @@
+@model PagedList<Events.MVC.Models.Events.EventViewModel>
+
+@{
+    ViewData["Title"] = "Events";
+    ViewData["HeaderActionLabel"] = "New event";
+    ViewData["HeaderActionTarget"] = "#create-event-panel";
+}
+
+<div class="d-flex flex-column gap-4">
+    <section id="create-event-panel" class="collapse">
+        <div class="card border-0 shadow-sm">
+            <div class="card-body">
+                <h2 class="h5 mb-3">Add a new event</h2>
+                <div id="create-event-form">
+                    <partial name="_CreateEventForm" model='new Events.MVC.Models.Events.EventViewModel { EventDate = DateOnly.FromDateTime(DateTime.Today) }' />
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <partial name="_EventsList" model="Model" />
+</div>
+
+@section Scripts {
+    <script>
+        document.body.addEventListener("event-created", function () {
+            var form = document.querySelector("#create-event-form form");
+            if (form) {
+                form.reset();
+            }
+
+            var dateInput = document.querySelector("#create-event-form input[type='date']");
+            if (dateInput && !dateInput.value) {
+                dateInput.value = new Date().toISOString().split("T")[0];
+            }
+
+            var panel = document.getElementById("create-event-panel");
+            if (panel && window.bootstrap) {
+                bootstrap.Collapse.getOrCreateInstance(panel).hide();
+            }
+        });
+    </script>
+}

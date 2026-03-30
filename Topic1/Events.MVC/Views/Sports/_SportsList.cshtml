@@ -1,0 +1,156 @@
+@model PagedList<Events.MVC.Models.Sports.SportViewModel>
+
+<section class="card border-0 shadow-sm" id="sports-list">
+    <div class="card-body">
+        <div id="sports-state" class="d-none">
+            <input type="hidden" name="page" value="@Model.PagingInfo.CurrentPage" />
+            <input type="hidden" name="pageSize" value="@Model.PagingInfo.ItemsPerPage" />
+            <input type="hidden" name="sorts" value="@Model.PagingInfo.Sorts" />
+            <input type="hidden" name="filters" value="@Model.PagingInfo.Filters" />
+        </div>
+
+        <form
+            asp-action="Index"
+            method="get"
+            class="d-flex justify-content-between align-items-start gap-3 flex-wrap flex-lg-nowrap mb-4"
+            hx-get="@Url.Action("Index", "Sports")"
+            hx-target="#sports-list"
+            hx-swap="outerHTML"
+            hx-push-url="true"
+            onsubmit="var input=this.querySelector('[data-name-filter-input]'); var filters=this.querySelector('[name=filters]'); filters.value=input && input.value.trim() ? 'Name' + String.fromCharCode(64) + '=*' + input.value.trim() : ''; this.querySelector('[name=page]').value='1';">
+            <input type="hidden" name="page" value="1" />
+            <input type="hidden" name="pageSize" value="@Model.PagingInfo.ItemsPerPage" />
+            <input type="hidden" name="sorts" value="@Model.PagingInfo.Sorts" />
+            <input type="hidden" name="filters" value="@Model.PagingInfo.Filters" />
+
+            <div class="d-flex align-items-center gap-3 pt-2">
+                <h2 class="h5 mb-0">Sports list</h2>
+                <span class="badge text-bg-light">@(Model.PagingInfo.IsFiltered ? $"{Model.PagingInfo.FilteredItemsCount} / {Model.PagingInfo.TotalItemsCount}" : Model.PagingInfo.TotalItemsCount.ToString())</span>
+            </div>
+
+            <div class="d-flex align-items-center gap-2 flex-nowrap ms-auto">
+                <input
+                    id="nameFilter"
+                    value="@Model.PagingInfo.NameFilter"
+                    data-name-filter-input
+                    class="form-control"
+                    style="max-width: 18rem;"
+                    placeholder="Search by sport name"
+                    aria-label="Filter by sport name" />
+
+                <button type="submit" class="btn btn-outline-primary">Filter</button>
+                @if (Model.PagingInfo.IsFiltered)
+                {
+                    <a
+                        asp-action="Index"
+                        asp-route-page="1"
+                        asp-route-pageSize="@Model.PagingInfo.ItemsPerPage"
+                        asp-route-sorts="@Model.PagingInfo.Sorts"
+                        asp-route-filters=""
+                        class="btn btn-outline-secondary"
+                        hx-get="@Url.Action("Index", "Sports", new { page = 1, pageSize = Model.PagingInfo.ItemsPerPage, sorts = Model.PagingInfo.Sorts, filters = string.Empty })"
+                        hx-target="#sports-list"
+                        hx-swap="outerHTML"
+                        hx-push-url="true">
+                        Clear
+                    </a>
+                }
+            </div>
+        </form>
+
+        <div class="table-responsive">
+            <table class="table align-middle mb-0">
+                <thead>
+                    <tr>
+                        <th>
+                            <a
+                                asp-action="Index"
+                                asp-route-page="@Model.PagingInfo.CurrentPage"
+                                asp-route-pageSize="@Model.PagingInfo.ItemsPerPage"
+                                asp-route-sorts="@Model.PagingInfo.ToggleSort("Id")"
+                                asp-route-filters="@Model.PagingInfo.Filters"
+                                class="link-dark link-underline-opacity-0"
+                                hx-get="@Url.Action("Index", "Sports", new { page = Model.PagingInfo.CurrentPage, pageSize = Model.PagingInfo.ItemsPerPage, sorts = Model.PagingInfo.ToggleSort("Id"), filters = Model.PagingInfo.Filters })"
+                                hx-target="#sports-list"
+                                hx-swap="outerHTML"
+                                hx-push-url="true">
+                                ID@(Model.PagingInfo.IsSortedBy("Id") ? (Model.PagingInfo.IsDescending() ? " ↓" : " ↑") : "")
+                            </a>
+                        </th>
+                        <th>
+                            <a
+                                asp-action="Index"
+                                asp-route-page="@Model.PagingInfo.CurrentPage"
+                                asp-route-pageSize="@Model.PagingInfo.ItemsPerPage"
+                                asp-route-sorts="@Model.PagingInfo.ToggleSort("Name")"
+                                asp-route-filters="@Model.PagingInfo.Filters"
+                                class="link-dark link-underline-opacity-0"
+                                hx-get="@Url.Action("Index", "Sports", new { page = Model.PagingInfo.CurrentPage, pageSize = Model.PagingInfo.ItemsPerPage, sorts = Model.PagingInfo.ToggleSort("Name"), filters = Model.PagingInfo.Filters })"
+                                hx-target="#sports-list"
+                                hx-swap="outerHTML"
+                                hx-push-url="true">
+                                Name@(Model.PagingInfo.IsSortedBy("Name") ? (Model.PagingInfo.IsDescending() ? " ↓" : " ↑") : "")
+                            </a>
+                        </th>
+                        <th class="text-end"></th>
+                    </tr>
+                </thead>
+                <tbody id="sports-table-body">
+                    @if (Model.Data.Count == 0)
+                    {
+                        <tr>
+                            <td colspan="3" class="text-body-secondary">No sports to display.</td>
+                        </tr>
+                    }
+                    else
+                    {
+                        @foreach (var sport in Model.Data)
+                        {
+                            <partial name="_SportRow" model="sport" />
+                        }
+                    }
+                </tbody>
+            </table>
+        </div>
+
+        <div class="d-flex justify-content-between align-items-center mt-4 gap-3 flex-wrap">
+            <div class="d-flex align-items-center gap-2 flex-wrap">
+                <small class="text-body-secondary">Page @Model.PagingInfo.CurrentPage of @Model.PagingInfo.TotalPages</small>
+                <form
+                    asp-action="Index"
+                    method="get"
+                    class="d-inline-flex align-items-center gap-2"
+                    hx-get="@Url.Action("Index", "Sports")"
+                    hx-target="#sports-list"
+                    hx-swap="outerHTML"
+                    hx-push-url="true">
+                    <input type="hidden" name="page" value="1" />
+                    <input type="hidden" name="sorts" value="@Model.PagingInfo.Sorts" />
+                    <input type="hidden" name="filters" value="@Model.PagingInfo.Filters" />
+                    <select
+                        name="pageSize"
+                        class="form-select form-select-sm"
+                        style="width: auto;"
+                        aria-label="Items per page"
+                        onchange="this.form.requestSubmit()">
+                        @{
+                            int[] pageSizeOptions = [10, 20, 50, 100];
+                        }
+                        @foreach (var option in pageSizeOptions)
+                        {
+                            <option value="@option" selected="@(Model.PagingInfo.ItemsPerPage == option)">@option</option>
+                        }
+                    </select>
+                </form>
+            </div>
+            <pager
+                page-info="@Model.PagingInfo"
+                page-action="Index"
+                page-title="Enter a page number and press Enter"
+                page-target="#sports-list"
+                page-swap="outerHTML"
+                page-push-url="true">
+            </pager>
+        </div>
+    </div>
+</section>

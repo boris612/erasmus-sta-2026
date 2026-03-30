@@ -1,0 +1,32 @@
+@model Events.MVC.Models.Sports.SportViewModel
+
+<tr id="sport-@Model.Id">
+    <td>@Model.Id</td>
+    <td>@Model.Name</td>
+    <td class="text-end">
+        <div class="d-inline-flex gap-2">
+            <button
+                type="button"
+                class="btn btn-sm btn-outline-primary"
+                hx-get="@Url.Action("EditRow", "Sports", new { id = Model.Id })"
+                hx-target="#sport-@Model.Id"
+                hx-swap="outerHTML">
+                Edit
+            </button>
+
+            <form
+                asp-action="Delete"
+                asp-route-id="@Model.Id"
+                method="post"
+                class="d-inline"
+                hx-post="@Url.Action("Delete", "Sports", new { id = Model.Id })"
+                hx-include="#sports-state"
+                hx-target="#sports-list"
+                hx-swap="outerHTML"
+                hx-confirm="Delete sport '@Model.Name'?">
+                @Html.AntiForgeryToken()
+                <button type="submit" class="btn btn-sm btn-outline-danger">Delete</button>
+            </form>
+        </div>
+    </td>
+</tr>

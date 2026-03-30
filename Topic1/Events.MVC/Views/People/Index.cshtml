@@ -1,0 +1,43 @@
+@model PagedList<Events.MVC.Models.People.PersonViewModel>
+
+@{
+    ViewData["Title"] = "People";
+    ViewData["HeaderActionLabel"] = "New person";
+    ViewData["HeaderActionTarget"] = "#create-person-panel";
+}
+
+<div class="d-flex flex-column gap-4">
+    <section id="create-person-panel" class="collapse">
+        <div class="card border-0 shadow-sm">
+            <div class="card-body">
+                <h2 class="h5 mb-3">Add a new person</h2>
+                <div id="create-person-form">
+                    <partial name="_CreatePersonForm" model='(Events.MVC.Models.People.PersonViewModel)ViewData["CreatePersonModel"]!' />
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <partial name="_PeopleList" model="Model" />
+</div>
+
+@section Scripts {
+    <script>
+        document.body.addEventListener("person-created", function () {
+            var form = document.querySelector("#create-person-form form");
+            if (form) {
+                form.reset();
+            }
+
+            var dateInput = document.querySelector("#create-person-form input[type='date']");
+            if (dateInput && !dateInput.value) {
+                dateInput.value = new Date().toISOString().split("T")[0];
+            }
+
+            var panel = document.getElementById("create-person-panel");
+            if (panel && window.bootstrap) {
+                bootstrap.Collapse.getOrCreateInstance(panel).hide();
+            }
+        });
+    </script>
+}

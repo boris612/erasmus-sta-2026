@@ -1,0 +1,100 @@
+@model Events.MVC.Models.People.PersonViewModel
+
+<tr id="person-@Model.Id">
+    <td>@Model.Id</td>
+    <td colspan="6">
+        <form
+            asp-action="Edit"
+            asp-route-id="@Model.Id"
+            method="post"
+            hx-post="@Url.Action("Edit", "People", new { id = Model.Id })"
+            hx-target="#person-@Model.Id"
+            hx-swap="outerHTML">
+            @Html.AntiForgeryToken()
+            <input asp-for="Id" type="hidden" />
+            <div asp-validation-summary="ModelOnly" class="text-danger small mb-2"></div>
+            <div class="row g-2 align-items-start">
+                <div class="col-md-3">
+                    <label asp-for="FirstName" class="form-label"></label>
+                    <input asp-for="FirstName" class="form-control" />
+                    <span asp-validation-for="FirstName" class="text-danger small"></span>
+                </div>
+                <div class="col-md-3">
+                    <label asp-for="LastName" class="form-label"></label>
+                    <input asp-for="LastName" class="form-control" />
+                    <span asp-validation-for="LastName" class="text-danger small"></span>
+                </div>
+                <div class="col-md-3">
+                    <label asp-for="FirstNameTranscription" class="form-label"></label>
+                    <input asp-for="FirstNameTranscription" class="form-control" />
+                    <span asp-validation-for="FirstNameTranscription" class="text-danger small"></span>
+                </div>
+                <div class="col-md-3">
+                    <label asp-for="LastNameTranscription" class="form-label"></label>
+                    <input asp-for="LastNameTranscription" class="form-control" />
+                    <span asp-validation-for="LastNameTranscription" class="text-danger small"></span>
+                </div>
+                <div class="col-md-4">
+                    <label asp-for="Email" class="form-label"></label>
+                    <input asp-for="Email" class="form-control" />
+                    <span asp-validation-for="Email" class="text-danger small"></span>
+                </div>
+                <div class="col-md-3">
+                    <label asp-for="ContactPhone" class="form-label"></label>
+                    <input asp-for="ContactPhone" class="form-control" />
+                    <span asp-validation-for="ContactPhone" class="text-danger small"></span>
+                </div>
+                <div class="col-md-3">
+                    <label asp-for="BirthDate" class="form-label"></label>
+                    <input asp-for="BirthDate" type="date" class="form-control" />
+                    <span asp-validation-for="BirthDate" class="text-danger small"></span>
+                </div>
+                <div class="col-md-2">
+                    <label asp-for="CountryCode" class="form-label"></label>
+                    <select asp-for="CountryCode" asp-items="Model.CountryOptions" class="form-select">
+                        <option value="">Select a country</option>
+                    </select>
+                    <span asp-validation-for="CountryCode" class="text-danger small"></span>
+                </div>
+                <div class="col-md-4">
+                    <label asp-for="DocumentNumber" class="form-label"></label>
+                    <input asp-for="DocumentNumber" class="form-control" />
+                    <span asp-validation-for="DocumentNumber" class="text-danger small"></span>
+                </div>
+                <div class="col-md-4">
+                    <label asp-for="AddressLine" class="form-label"></label>
+                    <input asp-for="AddressLine" class="form-control" />
+                    <span asp-validation-for="AddressLine" class="text-danger small"></span>
+                </div>
+                <div class="col-md-2">
+                    <label asp-for="PostalCode" class="form-label"></label>
+                    <input asp-for="PostalCode" class="form-control" />
+                    <span asp-validation-for="PostalCode" class="text-danger small"></span>
+                </div>
+                <div class="col-md-3">
+                    <label asp-for="City" class="form-label"></label>
+                    <input asp-for="City" class="form-control" />
+                    <span asp-validation-for="City" class="text-danger small"></span>
+                </div>
+                <div class="col-md-3">
+                    <label asp-for="AddressCountry" class="form-label"></label>
+                    <input asp-for="AddressCountry" class="form-control" />
+                    <span asp-validation-for="AddressCountry" class="text-danger small"></span>
+                </div>
+                <div class="col-md-auto">
+                    <button type="submit" class="btn btn-sm btn-primary">Save</button>
+                </div>
+                <div class="col-md-auto">
+                    <button
+                        type="button"
+                        class="btn btn-sm btn-outline-secondary"
+                        hx-get="@Url.Action("Row", "People", new { id = Model.Id })"
+                        hx-target="#person-@Model.Id"
+                        hx-swap="outerHTML">
+                        Cancel
+                    </button>
+                </div>
+            </div>
+        </form>
+    </td>
+</tr>

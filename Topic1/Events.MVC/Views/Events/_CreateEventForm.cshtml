@@ -1,0 +1,26 @@
+@model Events.MVC.Models.Events.EventViewModel
+
+<form
+    asp-action="Create"
+    method="post"
+    hx-post="@Url.Action("Create", "Events")"
+    hx-include="#events-state"
+    hx-target="#events-list"
+    hx-swap="outerHTML">
+    @Html.AntiForgeryToken()
+    <div class="row g-3 align-items-end">
+        <div class="col-lg-5">
+            <label asp-for="Name" class="form-label"></label>
+            <input asp-for="Name" class="form-control" />
+            <span asp-validation-for="Name" class="text-danger small"></span>
+        </div>
+        <div class="col-sm-4 col-lg-3">
+            <label asp-for="EventDate" class="form-label"></label>
+            <input asp-for="EventDate" class="form-control" type="date" />
+            <span asp-validation-for="EventDate" class="text-danger small"></span>
+        </div>
+        <div class="col-sm-auto">
+            <button type="submit" class="btn btn-primary">Add event</button>
+        </div>
+    </div>
+</form>

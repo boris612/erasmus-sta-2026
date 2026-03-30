@@ -1,0 +1,15 @@
+@model Events.MVC.Models.ErrorViewModel
+
+@{
+    ViewData["Title"] = "Error";
+}
+
+<div class="card border-0 shadow-sm">
+    <div class="card-body">
+        <h1 class="h4">An error occurred.</h1>
+        @if (Model.ShowRequestId)
+        {
+            <p class="text-body-secondary mb-0">Request ID: <code>@Model.RequestId</code></p>
+        }
+    </div>
+</div>

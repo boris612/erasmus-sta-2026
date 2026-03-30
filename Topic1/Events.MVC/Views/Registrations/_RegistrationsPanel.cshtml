@@ -1,0 +1,43 @@
+@model Events.MVC.Models.Registrations.RegistrationsPageViewModel
+
+<div class="d-flex flex-column gap-4" id="registrations-panel">
+    <section class="card border-0 shadow-sm">
+        <div class="card-body">
+            <form
+                asp-action="Index"
+                method="get"
+                class="row g-3 align-items-end"
+                hx-get="@Url.Action("Index", "Registrations")"
+                hx-target="#registrations-panel"
+                hx-swap="outerHTML"
+                hx-push-url="true">
+                <div class="col-lg-6">
+                    <label for="selectedEventId" class="form-label">Event</label>
+                    <select
+                        id="selectedEventId"
+                        name="eventId"
+                        asp-items="Model.EventOptions"
+                        class="form-select"
+                        onchange="this.form.requestSubmit()">
+                    </select>
+                </div>
+                <div class="col-auto">
+                    <span class="badge text-bg-light">Registrations for: @Model.SelectedEventName</span>
+                </div>
+            </form>
+        </div>
+    </section>
+
+    <section id="create-registration-panel" class="collapse">
+        <div class="card border-0 shadow-sm">
+            <div class="card-body">
+                <h2 class="h5 mb-3">Add a new registration</h2>
+                <div id="create-registration-form">
+                    <partial name="_CreateRegistrationForm" model="Model.CreateModel" />
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <partial name="_RegistrationsList" model="Model" />
+</div>

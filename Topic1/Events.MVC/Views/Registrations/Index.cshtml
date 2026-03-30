@@ -1,0 +1,85 @@
+@model Events.MVC.Models.Registrations.RegistrationsPageViewModel
+
+@{
+    ViewData["Title"] = "Registrations";
+    ViewData["HeaderActionLabel"] = "New registration";
+    ViewData["HeaderActionTarget"] = "#create-registration-panel";
+}
+
+<partial name="_RegistrationsPanel" model="Model" />
+
+@section Scripts {
+    <script>
+        function clearRegistrationSuggestions(scope) {
+            (scope || document).querySelectorAll(".registration-person-suggestions").forEach(function (container) {
+                container.innerHTML = "";
+            });
+        }
+
+        function syncRegistrationPersonLookup(input) {
+            var form = input.closest("form");
+            var hiddenInput = form ? form.querySelector("input[name='PersonId']") : null;
+            if (!hiddenInput) {
+                return;
+            }
+            hiddenInput.value = "";
+        }
+
+        document.body.addEventListener("input", function (event) {
+            if (event.target.matches("[data-person-autocomplete]")) {
+                syncRegistrationPersonLookup(event.target);
+            }
+        });
+
+        document.body.addEventListener("change", function (event) {
+            if (event.target.matches("[data-person-autocomplete]")) {
+                syncRegistrationPersonLookup(event.target);
+            }
+        });
+
+        document.body.addEventListener("click", function (event) {
+            var suggestion = event.target.closest("[data-person-suggestion]");
+            if (suggestion) {
+                var container = suggestion.closest(".registration-person-suggestions");
+                var wrapper = container ? container.closest(".registration-person-autocomplete") : null;
+                var input = wrapper ? wrapper.querySelector("[data-person-autocomplete]") : null;
+                var form = wrapper ? wrapper.closest("form") : null;
+                var hiddenInput = form ? form.querySelector("input[name='PersonId']") : null;
+
+                if (input && hiddenInput) {
+                    input.value = suggestion.dataset.personLabel || "";
+                    hiddenInput.value = suggestion.dataset.personId || "";
+                }
+
+                if (container) {
+                    container.innerHTML = "";
+                }
+                return;
+            }
+
+            if (!event.target.closest(".registration-person-autocomplete")) {
+                clearRegistrationSuggestions(document);
+            }
+        });
+
+        document.body.addEventListener("registration-created", function () {
+            var form = document.querySelector("#create-registration-form form");
+            if (form) {
+                form.reset();
+            }
+
+            var eventInput = document.querySelector("#create-registration-form input[name='EventId']");
+            var stateEventInput = document.querySelector("#registrations-state input[name='eventId']");
+            if (eventInput && stateEventInput) {
+                eventInput.value = stateEventInput.value;
+            }
+
+            clearRegistrationSuggestions(document.getElementById("create-registration-form"));
+
+            var panel = document.getElementById("create-registration-panel");
+            if (panel && window.bootstrap) {
+                bootstrap.Collapse.getOrCreateInstance(panel).hide();
+            }
+        });
+    </script>
+}

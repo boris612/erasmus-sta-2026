@@ -1,0 +1,168 @@
+@model PagedList<Events.MVC.Models.Countries.CountryViewModel>
+
+@{
+    ViewData["Title"] = "Countries";
+    ViewData["HeaderActionLabel"] = "New country";
+    ViewData["HeaderActionTarget"] = "#create-country-panel";
+}
+
+<div class="d-flex flex-column gap-4">
+    <section id="create-country-panel" class="collapse">
+        <div class="card border-0 shadow-sm">
+            <div class="card-body">
+                <h2 class="h5 mb-3">Add a new country</h2>
+                <div id="create-country-form">
+                    <partial name="_CreateCountryForm" model='new Events.MVC.Models.Countries.CountryViewModel()' />
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <partial name="_CountriesList" model="Model" />
+</div>
+
+@section Scripts {
+    <script>
+        function reindexCountryTranslations(editor) {
+            var prefix = editor.dataset.prefix || "Translations";
+            var rows = editor.querySelectorAll("[data-translation-row]");
+
+            rows.forEach(function (row, index) {
+                row.querySelectorAll("[data-field]").forEach(function (input) {
+                    input.name = prefix + "[" + index + "]." + input.dataset.field;
+                });
+            });
+
+            editor.querySelectorAll("[data-remove-translation]").forEach(function (button) {
+                button.disabled = rows.length === 1 && button.hasAttribute("data-keep-one");
+            });
+        }
+
+        function ensureCountryTranslationNames(editor) {
+            editor.querySelectorAll("[data-translation-row]").forEach(function (row) {
+                row.querySelectorAll("input[name]").forEach(function (input) {
+                    var match = input.name.match(/\.([^.]+)$/);
+                    if (match) {
+                        input.dataset.field = match[1];
+                    }
+                });
+            });
+
+            reindexCountryTranslations(editor);
+        }
+
+        function validateCountryTranslations(form) {
+            var editor = form.querySelector("[data-country-translations]");
+            if (!editor) {
+                return true;
+            }
+
+            var rows = editor.querySelectorAll("[data-translation-row]");
+            for (var i = 0; i < rows.length; i++) {
+                var languageInput = rows[i].querySelector("[data-field='LanguageCode'], input[name$='.LanguageCode']");
+                var nameInput = rows[i].querySelector("[data-field='Name'], input[name$='.Name']");
+                var language = languageInput ? languageInput.value.trim() : "";
+                var name = nameInput ? nameInput.value.trim() : "";
+
+                if ((language && !name) || (!language && name)) {
+                    showAppToast({
+                        variant: "error",
+                        title: "Error",
+                        message: "Every translation row must contain both a language code and a translation."
+                    });
+
+                    if (!language && languageInput) {
+                        languageInput.focus();
+                    } else if (nameInput) {
+                        nameInput.focus();
+                    }
+
+                    return false;
+                }
+            }
+
+            return true;
+        }
+
+        document.body.addEventListener("click", function (event) {
+            var addButton = event.target.closest("[data-add-translation]");
+            if (addButton) {
+                var editor = addButton.closest("[data-country-translations]");
+                var template = editor ? editor.querySelector("[data-translation-template]") : null;
+                var list = editor ? editor.querySelector("[data-translation-list]") : null;
+
+                if (!editor || !template || !list) {
+                    return;
+                }
+
+                list.insertAdjacentHTML("beforeend", template.innerHTML.trim());
+                reindexCountryTranslations(editor);
+                return;
+            }
+
+            var removeButton = event.target.closest("[data-remove-translation]");
+            if (removeButton) {
+                var row = removeButton.closest("[data-translation-row]");
+                var owner = removeButton.closest("[data-country-translations]");
+                var rows = owner ? owner.querySelectorAll("[data-translation-row]") : [];
+
+                if (!row || !owner || rows.length <= 1) {
+                    return;
+                }
+
+                row.remove();
+                reindexCountryTranslations(owner);
+            }
+        });
+
+        document.body.addEventListener("submit", function (event) {
+            var form = event.target;
+            if (!(form instanceof HTMLFormElement)) {
+                return;
+            }
+
+            if (!form.matches("#create-country-form form, tr[id^='country-'] form")) {
+                return;
+            }
+
+            if (!validateCountryTranslations(form)) {
+                event.preventDefault();
+            }
+        });
+
+        document.body.addEventListener("htmx:afterSwap", function (event) {
+            if (event.target && (event.target.id === "create-country-form" || event.target.id === "countries-list" || event.target.id.indexOf("country-") === 0)) {
+                document.querySelectorAll("[data-country-translations]").forEach(ensureCountryTranslationNames);
+            }
+        });
+
+        document.querySelectorAll("[data-country-translations]").forEach(ensureCountryTranslationNames);
+
+        document.body.addEventListener("country-created", function () {
+            var form = document.querySelector("#create-country-form form");
+            if (form) {
+                form.reset();
+            }
+
+            var editor = document.querySelector("#create-country-form [data-country-translations]");
+            if (editor) {
+                var rows = editor.querySelectorAll("[data-translation-row]");
+                rows.forEach(function (row, index) {
+                    if (index > 0) {
+                        row.remove();
+                    } else {
+                        row.querySelectorAll("input").forEach(function (input) {
+                            input.value = "";
+                        });
+                    }
+                });
+                reindexCountryTranslations(editor);
+            }
+
+            var panel = document.getElementById("create-country-panel");
+            if (panel && window.bootstrap) {
+                bootstrap.Collapse.getOrCreateInstance(panel).hide();
+            }
+        });
+    </script>
+}

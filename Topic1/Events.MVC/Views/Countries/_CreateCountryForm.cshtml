@@ -1,0 +1,36 @@
+@model Events.MVC.Models.Countries.CountryViewModel
+
+<form
+    asp-action="Create"
+    method="post"
+    hx-post="@Url.Action("Create", "Countries")"
+    hx-include="#countries-state"
+    hx-target="#countries-list"
+    hx-swap="outerHTML">
+    @Html.AntiForgeryToken()
+    <div asp-validation-summary="ModelOnly" class="text-danger small mb-3"></div>
+    <div class="row g-3 align-items-end">
+        <div class="col-sm-3 col-lg-2">
+            <label asp-for="Code" class="form-label"></label>
+            <input asp-for="Code" class="form-control text-uppercase" />
+            <span asp-validation-for="Code" class="text-danger small"></span>
+        </div>
+        <div class="col-sm-3 col-lg-2">
+            <label asp-for="Alpha3" class="form-label"></label>
+            <input asp-for="Alpha3" class="form-control text-uppercase" />
+            <span asp-validation-for="Alpha3" class="text-danger small"></span>
+        </div>
+        <div class="col-lg-5">
+            <label asp-for="Name" class="form-label"></label>
+            <input asp-for="Name" class="form-control" />
+            <span asp-validation-for="Name" class="text-danger small"></span>
+        </div>
+        <div class="col-sm-auto">
+            <button type="submit" class="btn btn-primary">Add country</button>
+        </div>
+    </div>
+
+    <div class="mt-4">
+        <partial name="_CountryTranslationsEditor" model="Model.Translations" view-data='new ViewDataDictionary(ViewData) { ["Prefix"] = "Translations", ["CanRemoveRows"] = false }' />
+    </div>
+</form>
