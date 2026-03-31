@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang='en'>
+<head>
+<meta charset='utf-8' />
+<title>Events.WebAPI.Benchmarks.Question2.Question2InsertBenchmarks-20260401-091322</title>
+
+<style type="text/css">
+	table { border-collapse: collapse; display: block; width: 100%; overflow: auto; }
+	td, th { padding: 6px 13px; border: 1px solid #ddd; text-align: right; }
+	tr { background-color: #fff; border-top: 1px solid #ccc; }
+	tr:nth-child(even) { background: #f8f8f8; }
+</style>
+</head>
+<body>
+<pre><code>
+BenchmarkDotNet v0.14.0, macOS Sequoia 15.7.4 (24G517) [Darwin 24.6.0]
+Apple M4, 1 CPU, 10 logical and 10 physical cores
+.NET SDK 10.0.103
+  [Host]     : .NET 8.0.20 (8.0.2025.41914), Arm64 RyuJIT AdvSIMD
+  DefaultJob : .NET 8.0.20 (8.0.2025.41914), Arm64 RyuJIT AdvSIMD
+</code></pre>
+<pre><code></code></pre>
+
+<table>
+<thead><tr><th>Method                </th><th>InsertCount</th><th>Mean  </th><th>Error</th><th>StdDev</th><th>Ratio</th><th>RatioSD</th><th>Gen0</th><th>Gen1</th><th>Gen2</th><th>Allocated</th><th>Alloc Ratio</th>
+</tr>
+</thead><tbody><tr><td>AutoMapper_To_EF_Insert</td><td>1</td><td>566.9 &mu;s</td><td>8.74 &mu;s</td><td>7.75 &mu;s</td><td>1.99</td><td>0.06</td><td>8.7891</td><td>-</td><td>-</td><td>73.55 KB</td><td>15.37</td>
+</tr><tr><td>Manual_EF_Insert</td><td>1</td><td>566.5 &mu;s</td><td>4.25 &mu;s</td><td>3.55 &mu;s</td><td>1.99</td><td>0.06</td><td>8.7891</td><td>-</td><td>-</td><td>73.35 KB</td><td>15.33</td>
+</tr><tr><td>AddRange_EF_Insert</td><td>1</td><td>567.8 &mu;s</td><td>11.26 &mu;s</td><td>12.05 &mu;s</td><td>2.00</td><td>0.07</td><td>8.7891</td><td>-</td><td>-</td><td>73.55 KB</td><td>15.37</td>
+</tr><tr><td>AdoNet_Insert</td><td>1</td><td>289.5 &mu;s</td><td>5.76 &mu;s</td><td>12.40 &mu;s</td><td>1.02</td><td>0.05</td><td>-</td><td>-</td><td>-</td><td>3.78 KB</td><td>0.79</td>
+</tr><tr><td>EfCore_BulkExtensions_Insert</td><td>1</td><td>468.5 &mu;s</td><td>9.22 &mu;s</td><td>12.62 &mu;s</td><td>1.65</td><td>0.06</td><td>10.7422</td><td>-</td><td>-</td><td>91.41 KB</td><td>19.11</td>
+</tr><tr><td>AdoNet_BulkInsert_Unnest</td><td>1</td><td>283.5 &mu;s</td><td>5.24 &mu;s</td><td>7.00 &mu;s</td><td>1.00</td><td>0.04</td><td>-</td><td>-</td><td>-</td><td>3.91 KB</td><td>0.82</td>
+</tr><tr><td>StoredProcedure_Insert</td><td>1</td><td>284.7 &mu;s</td><td>4.84 &mu;s</td><td>8.08 &mu;s</td><td>1.00</td><td>0.04</td><td>0.4883</td><td>-</td><td>-</td><td>4.78 KB</td><td>1.00</td>
+</tr><tr><td>AutoMapper_To_EF_Insert</td><td>10</td><td>3,834.2 &mu;s</td><td>69.28 &mu;s</td><td>99.35 &mu;s</td><td>2.49</td><td>0.06</td><td>23.4375</td><td>-</td><td>-</td><td>237.42 KB</td><td>18.93</td>
+</tr><tr><td>Manual_EF_Insert</td><td>10</td><td>3,808.6 &mu;s</td><td>76.06 &mu;s</td><td>109.08 &mu;s</td><td>2.48</td><td>0.07</td><td>23.4375</td><td>-</td><td>-</td><td>236.48 KB</td><td>18.85</td>
+</tr><tr><td>AddRange_EF_Insert</td><td>10</td><td>992.2 &mu;s</td><td>17.57 &mu;s</td><td>16.43 &mu;s</td><td>0.65</td><td>0.01</td><td>19.5313</td><td>1.9531</td><td>-</td><td>172.9 KB</td><td>13.78</td>
+</tr><tr><td>AdoNet_Insert</td><td>10</td><td>1,435.2 &mu;s</td><td>28.12 &mu;s</td><td>47.75 &mu;s</td><td>0.93</td><td>0.03</td><td>-</td><td>-</td><td>-</td><td>10.25 KB</td><td>0.82</td>
+</tr><tr><td>EfCore_BulkExtensions_Insert</td><td>10</td><td>724.1 &mu;s</td><td>5.19 &mu;s</td><td>4.60 &mu;s</td><td>0.47</td><td>0.00</td><td>9.7656</td><td>-</td><td>-</td><td>94.58 KB</td><td>7.54</td>
+</tr><tr><td>AdoNet_BulkInsert_Unnest</td><td>10</td><td>416.5 &mu;s</td><td>3.17 &mu;s</td><td>2.48 &mu;s</td><td>0.27</td><td>0.00</td><td>-</td><td>-</td><td>-</td><td>3.97 KB</td><td>0.32</td>
+</tr><tr><td>StoredProcedure_Insert</td><td>10</td><td>1,537.8 &mu;s</td><td>7.74 &mu;s</td><td>6.04 &mu;s</td><td>1.00</td><td>0.01</td><td>-</td><td>-</td><td>-</td><td>12.54 KB</td><td>1.00</td>
+</tr><tr><td>AutoMapper_To_EF_Insert</td><td>1000</td><td>360,715.6 &mu;s</td><td>7,199.60 &mu;s</td><td>13,164.88 &mu;s</td><td>2.57</td><td>0.11</td><td>2000.0000</td><td>1000.0000</td><td>-</td><td>18260.62 KB</td><td>20.934</td>
+</tr><tr><td>Manual_EF_Insert</td><td>1000</td><td>366,823.3 &mu;s</td><td>7,040.83 &mu;s</td><td>6,586.00 &mu;s</td><td>2.61</td><td>0.08</td><td>2000.0000</td><td>-</td><td>-</td><td>18164.69 KB</td><td>20.824</td>
+</tr><tr><td>AddRange_EF_Insert</td><td>1000</td><td>37,244.3 &mu;s</td><td>337.66 &mu;s</td><td>315.84 &mu;s</td><td>0.27</td><td>0.01</td><td>1285.7143</td><td>642.8571</td><td>285.7143</td><td>10752.48 KB</td><td>12.327</td>
+</tr><tr><td>AdoNet_Insert</td><td>1000</td><td>132,136.7 &mu;s</td><td>2,548.35 &mu;s</td><td>2,502.82 &mu;s</td><td>0.94</td><td>0.03</td><td>-</td><td>-</td><td>-</td><td>722.82 KB</td><td>0.829</td>
+</tr><tr><td>EfCore_BulkExtensions_Insert</td><td>1000</td><td>18,008.8 &mu;s</td><td>119.00 &mu;s</td><td>105.49 &mu;s</td><td>0.13</td><td>0.00</td><td>31.2500</td><td>-</td><td>-</td><td>443 KB</td><td>0.508</td>
+</tr><tr><td>AdoNet_BulkInsert_Unnest</td><td>1000</td><td>14,931.0 &mu;s</td><td>159.94 &mu;s</td><td>133.55 &mu;s</td><td>0.11</td><td>0.00</td><td>-</td><td>-</td><td>-</td><td>7.93 KB</td><td>0.009</td>
+</tr><tr><td>StoredProcedure_Insert</td><td>1000</td><td>140,505.6 &mu;s</td><td>2,687.91 &mu;s</td><td>3,399.35 &mu;s</td><td>1.00</td><td>0.03</td><td>-</td><td>-</td><td>-</td><td>872.28 KB</td><td>1.000</td>
+</tr></tbody></table>
+</body>
+</html>

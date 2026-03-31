@@ -249,7 +249,7 @@ When you are done, stop it with:
 Run Topic 2 benchmarks with:
 
 ```sh
-./commands/benchmark.sh -- 1
+./commands/benchmark.sh 1
 ```
 
 Before running benchmarks, make sure the required infrastructure is available:

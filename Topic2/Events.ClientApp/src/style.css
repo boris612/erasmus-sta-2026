@@ -1,0 +1,224 @@
+:root {
+  color-scheme: light;
+  font-family: "Segoe UI", "Trebuchet MS", sans-serif;
+  background:
+    radial-gradient(circle at top left, rgba(26, 115, 232, 0.15), transparent 30%),
+    radial-gradient(circle at bottom right, rgba(28, 180, 137, 0.14), transparent 28%),
+    #f4f7fb;
+  color: #16324f;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  min-width: 320px;
+}
+
+#app {
+  min-height: 100vh;
+}
+
+.app-shell {
+  max-width: 1600px;
+  margin: 0 auto;
+  padding: 18px;
+}
+
+.workspace {
+  padding: 18px;
+  border-radius: 24px;
+  background: rgba(255, 255, 255, 0.78);
+  backdrop-filter: blur(14px);
+  box-shadow: 0 20px 40px rgba(14, 42, 71, 0.08);
+}
+
+.panel-card {
+  border-radius: 20px;
+  padding: 18px;
+  background: #ffffff;
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.9), 0 8px 24px rgba(15, 35, 56, 0.06);
+}
+
+.tabs-header-bar {
+  display: grid;
+  grid-template-columns: 1fr auto 1fr;
+  align-items: center;
+  gap: 16px;
+  margin-bottom: 14px;
+}
+
+.tabs-header-bar > :first-child {
+  justify-self: start;
+}
+
+.tabs-header-center {
+  justify-self: center;
+}
+
+.tabs-header-actions {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  justify-self: end;
+}
+
+.user-chip {
+  padding: 0.6rem 0.9rem;
+  border-radius: 999px;
+  background: rgba(22, 50, 79, 0.08);
+  color: #35536d;
+  font-size: 0.92rem;
+  white-space: nowrap;
+}
+
+.user-chip-button {
+  border: 0;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  cursor: pointer;
+}
+
+.panel-toolbar {
+  display: flex;
+  gap: 12px;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 14px;
+}
+
+.panel-toolbar-left {
+  display: flex;
+  gap: 12px;
+  flex-wrap: wrap;
+  align-items: center;
+}
+
+.field-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  gap: 14px;
+}
+
+.field-grid-person {
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+}
+
+.field-grid-registration {
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+}
+
+.field {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.field-span-2 {
+  grid-column: span 2;
+}
+
+.field label {
+  font-size: 0.88rem;
+  font-weight: 600;
+  color: #35536d;
+}
+
+.column-header-filter {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  min-width: 10rem;
+}
+
+.column-header-filter > span {
+  font-weight: 600;
+}
+
+.inline-actions {
+  display: flex;
+  gap: 8px;
+  justify-content: flex-end;
+}
+
+.status-banner {
+  margin-top: 16px;
+  border-radius: 16px;
+  padding: 12px 14px;
+  font-size: 0.95rem;
+}
+
+.status-banner.error {
+  background: #fff0f0;
+  color: #a61b1b;
+}
+
+.status-banner.success {
+  background: #eefbf4;
+  color: #12663f;
+}
+
+.lookup-item {
+  display: flex;
+  flex-direction: column;
+}
+
+.lookup-item small {
+  color: #65819b;
+}
+
+.auth-state {
+  min-height: calc(100vh - 72px);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.auth-card {
+  width: min(28rem, 100%);
+  text-align: center;
+}
+
+.auth-card h1 {
+  margin-top: 0;
+  margin-bottom: 0.75rem;
+}
+
+.auth-card p {
+  margin-bottom: 1.25rem;
+  color: #4d6780;
+}
+
+@media (max-width: 768px) {
+  .app-shell {
+    padding: 16px;
+  }
+
+  .tabs-header-bar {
+    grid-template-columns: 1fr;
+  }
+
+  .tabs-header-center,
+  .tabs-header-actions,
+  .tabs-header-bar > :first-child {
+    justify-self: stretch;
+  }
+
+  .tabs-header-actions {
+    flex-wrap: wrap;
+    justify-content: flex-end;
+  }
+
+  .field-grid-person,
+  .field-grid-registration {
+    grid-template-columns: 1fr;
+  }
+
+  .field-span-2 {
+    grid-column: auto;
+  }
+}
