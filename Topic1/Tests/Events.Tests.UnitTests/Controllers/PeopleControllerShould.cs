@@ -25,6 +25,7 @@ public class PeopleControllerShould
         Assert.Equal("At least one country must be created before adding people.", controller.TempData["ToastMessage"]);
     }
 
+    [Fact]
     public async Task CreatePerson()
     {
         await using var ctx = ControllerTestContext.CreateContext();
@@ -53,8 +54,51 @@ public class PeopleControllerShould
 
         var partial = Assert.IsType<PartialViewResult>(result);
         Assert.Equal("_PeopleList", partial.ViewName);
-        Assert.Contains(ctx.People, p => p.FirstName == "Ana" && p.CountryCode == "HR");
+        var model = Assert.IsType<PagedList<PersonViewModel>>(partial.Model);
+        Assert.Contains(model.Data, p => p.FullName == "Ana Kovac" && p.CountryName == "Croatia");
         Assert.Contains("was added successfully", controller.Response.Headers["HX-Trigger"].ToString());
+    }
+
+    [Fact]
+    public async Task ReturnPartialViewWithExpectedPeopleListForPersonAddedBeforeIndexRead()
+    {
+        await using var ctx = ControllerTestContext.CreateContext();
+        ctx.Countries.Add(ControllerTestContext.CreateCountry());
+        await ctx.SaveChangesAsync();
+        var controller = CreateController(ctx);
+
+        await controller.Create(
+            new PersonViewModel
+            {
+                FirstName = "Ana",
+                LastName = "Kovac",
+                FirstNameTranscription = "Ana",
+                LastNameTranscription = "Kovac",
+                AddressLine = "Main Street 1",
+                PostalCode = "10000",
+                City = "Zagreb",
+                AddressCountry = "Croatia",
+                Email = "ana.kovac@example.com",
+                ContactPhone = "+38591123456",
+                BirthDate = new DateOnly(1995, 1, 1),
+                DocumentNumber = "DOC-2",
+                CountryCode = "hr"
+            },
+            ControllerTestContext.EmptySieveModel());
+
+        controller.Request.Headers["HX-Request"] = "true";
+
+        var result = await controller.Index(new SieveModel
+        {
+            Filters = "FirstName==Ana"
+        });
+
+        var partial = Assert.IsType<PartialViewResult>(result);
+        Assert.Equal("_PeopleList", partial.ViewName);
+        var model = Assert.IsType<PagedList<PersonViewModel>>(partial.Model);
+        var person = Assert.Single(model.Data);
+        Assert.Equal("Ana Kovac", person.FullName);
+        Assert.Equal("Croatia", person.CountryName);
     }
 
     [Fact]
