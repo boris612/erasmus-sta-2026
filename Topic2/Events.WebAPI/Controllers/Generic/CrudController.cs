@@ -42,7 +42,6 @@ public abstract class CrudController<TDto, TPK> : GetController<TDto, TPK>
     var item = await mediator.Send(query);   
     var action = CreatedAtAction(nameof(Get), new { id }, item);
 
-    //action.RouteValues[tenantIdResolverService.RouteParameterName()] = tenantIdResolverService.TenantIdentifier();
     return action;
   }
 
