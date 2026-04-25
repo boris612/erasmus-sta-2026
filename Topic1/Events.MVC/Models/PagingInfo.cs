@@ -2,19 +2,19 @@ namespace Events.MVC.Models;
 
 public class PagingInfo
 {
-    public int TotalItemsCount { get; init; }
+    public int TotalItemsCount { get; set; }
 
-    public int FilteredItemsCount { get; init; }
+    public int FilteredItemsCount { get; set; }
 
-    public int ItemsPerPage { get; init; }
+    public int ItemsPerPage { get; set; }
 
-    public int CurrentPage { get; init; }
+    public int CurrentPage { get; set; }
 
-    public string Sorts { get; init; } = "Name";
+    public string Sorts { get; set; } = "Name";
 
-    public string Filters { get; init; } = string.Empty;
+    public string Filters { get; set; } = string.Empty;
 
-    public string NameFilter { get; init; } = string.Empty;
+    public string NameFilter { get; set; } = string.Empty;
 
     public int TotalPages => Math.Max(1, (int)Math.Ceiling((decimal)FilteredItemsCount / ItemsPerPage));
 

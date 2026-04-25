@@ -221,30 +221,12 @@ public class CountriesController : Controller
 
         if (pagingInfo.CurrentPage > pagingInfo.TotalPages)
         {
-            pagingInfo = new PagingInfo
-            {
-                FilteredItemsCount = filteredCount,
-                TotalItemsCount = totalCount,
-                ItemsPerPage = pagingInfo.ItemsPerPage,
-                CurrentPage = pagingInfo.TotalPages,
-                Sorts = pagingInfo.Sorts,
-                Filters = pagingInfo.Filters,
-                NameFilter = pagingInfo.NameFilter
-            };
+            pagingInfo.CurrentPage = pagingInfo.TotalPages;
             sieveModel.Page = pagingInfo.CurrentPage;
         }
 
         var sortedQuery = sieveProcessor.Apply(sieveModel, baseQuery, applyFiltering: true, applySorting: true, applyPagination: false);
-        return await PagedList<CountryViewModel>.CreateAsync(sortedQuery, new PagingInfo
-        {
-            FilteredItemsCount = filteredCount,
-            TotalItemsCount = totalCount,
-            ItemsPerPage = pagingInfo.ItemsPerPage,
-            CurrentPage = pagingInfo.CurrentPage,
-            Sorts = pagingInfo.Sorts,
-            Filters = pagingInfo.Filters,
-            NameFilter = pagingInfo.NameFilter
-        });
+        return await PagedList<CountryViewModel>.CreateAsync(sortedQuery, pagingInfo);
     }
 
     private void ValidateTranslations(CountryViewModel model)
